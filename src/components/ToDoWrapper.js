@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import ToDoForm from './ToDoForm'
 import Todo from './Todo'
 import { v4 as uuidv4} from 'uuid'
+import EditToDoForm from './EditToDoForm';
 uuidv4();
 
 const ToDoWrapper = () => {
@@ -18,12 +19,21 @@ const ToDoWrapper = () => {
     const deleteToDo = id =>{
         setTodos(todos.filter(todo=> todo.id != id))
     }
+    const editTodo = id =>{
+      setTodos(todos.map(todo=> todo.id == id ? {...
+        todo, isEditing: !todo.isEditing} : todo
+      ))
+    }
   return (
     <div className='TodoWrapper'>
         <h1>Things To Do!</h1>
       <ToDoForm addTodo = {addTodo}/>
-      {todos.map((todo, index) => 
-        <Todo task = {todo} key = {index} toggleComplete={toggleComplete} deleteToDo = {deleteToDo}/>
+      {todos.map((todo, index) => (todo.isEditing ? 
+        (
+          <EditToDoForm/>
+        ) :
+        <Todo task = {todo} key = {index} toggleComplete={toggleComplete} deleteToDo = {deleteToDo} editTodo={editTodo}/>
+      )
     )}
     </div>
   )
